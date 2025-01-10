@@ -8,15 +8,23 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JWTAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilter() {
+    init {
+        println("JWTAuthenticationFilter registrado")
+    }
+    
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
+        
     ) {
         // filtragem das requisições
 
         val token = request.getHeader("Authorization")
-        val jwt = getTpkenDetails(token)
+        print(token)
+        val jwt = getTokenDetails(token)
+        print(jwt)
+
         if (jwtUtil.isValue(jwt)) {
             val authentication = jwtUtil.getAuthentication(jwt)
             SecurityContextHolder.getContext().authentication = authentication
@@ -25,10 +33,14 @@ class JWTAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
 
     }
 
-    private fun getTpkenDetails(token: String?) = token?.let { jwt ->
-        jwt.startsWith("Bearer ")// verifica se começa com o bearer
-        jwt.substring(7, jwt.length)
+    private fun getTokenDetails(token: String?): String?{
+        val lalala= token?.let { jwt ->
+            jwt.startsWith("Bearer ")// verifica se começa com o bearer
+            jwt.substring(7, jwt.length)}
+        
+            print(lalala)
+return lalala
     }
-}
+
 
 

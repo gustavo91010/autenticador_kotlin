@@ -11,7 +11,7 @@ import java.util.Date
 @Component
 class JwtUtil {
 
-    val expiraion: Long = 6000 // 1 min
+    val expiraion: Long = 64000 // 1 min
 
     @Value("\${jwt.secret}")
     private lateinit var secret: String // só vai ser carregado quando for utilizado
