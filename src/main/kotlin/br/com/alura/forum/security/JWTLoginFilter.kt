@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
@@ -36,7 +35,7 @@ print("hum...")
         authResult: Authentication?
     ) {
         val username = (authResult?.principal as UserDetail).username
-        val token = jwtUtil.generateToken(username)
+        val token = jwtUtil.generateToken(username, user.authorities)
         println("Token gerado: $token")
         response?.addHeader("Authorization", "Bearer $token")
         println("Cabeçalho Authorization adicionado")

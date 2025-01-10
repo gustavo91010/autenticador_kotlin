@@ -30,7 +30,8 @@ class SecurityConfiguration(
         // se o http não for nulo...
         http?.csrf()?.disable()
             ?.authorizeRequests()
-
+            ?.antMatchers("/topicos")
+            ?.hasAuthority("LEITURA_ESCRITA")
             ?.antMatchers(HttpMethod.POST, "/login")?.permitAll()// liberando o path logun do verbo POST
             ?.anyRequest() // qualquer requisição deve estar autenticada
 

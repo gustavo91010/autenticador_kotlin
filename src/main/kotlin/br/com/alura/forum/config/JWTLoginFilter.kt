@@ -5,7 +5,6 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import javax.servlet.Filter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -27,8 +26,8 @@ class JWTLoginFilter(
         chain: FilterChain?,
         authResult: Authentication?
     ) {
-        val username = (authResult?.principal as UserDetail).username
-        val token = jwtUtil.generateToken(username)
-        response?.addHeader("Authorization", "Bearer $token'")
+        val lalalaUser = (authResult?.principal as UserDetail)
+        val token = jwtUtil.generateToken(lalalaUser.username, lalalaUser.authorities)
+        response?.addHeader("Authorization", "Bearer $token")
     }
 }

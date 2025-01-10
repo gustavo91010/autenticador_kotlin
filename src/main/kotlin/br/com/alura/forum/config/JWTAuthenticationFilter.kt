@@ -11,12 +11,12 @@ class JWTAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
     init {
         println("JWTAuthenticationFilter registrado")
     }
-    
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
-        
+
     ) {
         // filtragem das requisições
 
@@ -33,14 +33,11 @@ class JWTAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
 
     }
 
-    private fun getTokenDetails(token: String?): String?{
-        val lalala= token?.let { jwt ->
-            jwt.startsWith("Bearer ")// verifica se começa com o bearer
-            jwt.substring(7, jwt.length)}
-        
-            print(lalala)
-return lalala
+    private fun getTokenDetails(token: String?) = token?.let { jwt ->
+        jwt.startsWith("Bearer ")// verifica se começa com o bearer
+        jwt.substring(7, jwt.length)
     }
+}
 
 
 
