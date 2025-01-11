@@ -15,8 +15,4 @@ spring:
       enabled: true
 jwt:
   secret: chave_secreta
-logging:
-  level:
-    org.springframework.security=DEBUG
-    br.com.alura.forum=DEBUG
 

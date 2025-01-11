@@ -1,7 +1,8 @@
 package br.com.alura.forum.config
 
-import br.com.alura.forum.config.JwtUtil
+import br.com.alura.forum.security.JWTAuthenticationFilter
 import br.com.alura.forum.security.JWTLoginFilter
+import br.com.alura.forum.security.JwtUtil
 
 
 import org.springframework.context.annotation.Bean
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.web.filter.OncePerRequestFilter
 
 @Configuration
 @EnableWebSecurity
@@ -32,22 +32,11 @@ class SecurityConfiguration(
             ?.authorizeRequests()
             ?.antMatchers("/topicos")
             ?.hasAuthority("LEITURA_ESCRITA")
-            ?.antMatchers(HttpMethod.POST, "/login")?.permitAll()// liberando o path logun do verbo POST
+            ?.antMatchers(HttpMethod.POST, "/auth")?.permitAll()// liberando o path logun do verbo POST
             ?.anyRequest() // qualquer requisição deve estar autenticada
 
             ?.authenticated()?.and()
-            println("Configuração de segurança inicializada")
-            /*
-            http?.addFilterAfter(
-                JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil),
-                UsernamePasswordAuthenticationFilter().javaClass
-                )
-                println("Configuração de segurança inicializada2" )
-                http?.addFilterAfter(
-                    JWTAuthenticationFilter(jwtUtil = jwtUtil),
-                    UsernamePasswordAuthenticationFilter::class.java
-                    )// fazer a validação do token a cada requisição
-                    */
+
                     http?.addFilterBefore(
     JWTLoginFilter(authManager = authenticationManager(), jwtUtil = jwtUtil),
     UsernamePasswordAuthenticationFilter::class.java
@@ -63,7 +52,7 @@ http?.addFilterBefore(
 
     }
     
-    @Bean
+//    @Bean
  private fun byCryptPasswordEncoder(): BCryptPasswordEncoder {
      return BCryptPasswordEncoder()
  }

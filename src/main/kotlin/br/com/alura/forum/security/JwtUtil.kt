@@ -1,4 +1,4 @@
-package br.com.alura.forum.config
+package br.com.alura.forum.security
 
 import br.com.alura.forum.model.Role
 import br.com.alura.forum.service.UsuarioService
@@ -19,9 +19,9 @@ class JwtUtil(
 
     @Value("\${jwt.secret}")
     private lateinit var secret: String // só vai ser carregado quando for utilizado
-    fun generateToken(username: String, authorities: List<Role>): String? {
 
-        return Jwts.builder()
+    fun generateToken(username: String, authorities: List<Role>): String? {
+       return Jwts.builder()
             .setSubject(username)
             .claim("role", authorities)
             .setExpiration(Date(System.currentTimeMillis() + expiraion))
@@ -31,11 +31,13 @@ class JwtUtil(
             ).compact()
     }
 
-
     fun isValue(jwt: String?): Boolean {
-
+        if (jwt.isNullOrBlank()) {
+            println("JWT está vazio ou nulo.")
+            return false
+        }
         return try {
-            Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJwt(jwt)
+            Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(jwt)
             true
         } catch (e: IllegalArgumentException) {
             false
@@ -44,8 +46,8 @@ class JwtUtil(
 
     fun getAuthentication(jwt: String?): Authentication {
         val username = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJwt(jwt).body.subject
-        val userlololo = usuarioService.loadUserByUsername(username)
-        return UsernamePasswordAuthenticationToken(username, null, userlololo.authorities)
+        val user = usuarioService.loadUserByUsername(username)
+        return UsernamePasswordAuthenticationToken(user.username, null, user.authorities)
 
     }
 

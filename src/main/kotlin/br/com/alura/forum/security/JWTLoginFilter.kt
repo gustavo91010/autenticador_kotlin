@@ -1,8 +1,7 @@
 package br.com.alura.forum.security
 
-
-import br.com.alura.forum.config.JwtUtil
 import br.com.alura.forum.config.UserDetail
+import br.com.alura.forum.model.Role
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -13,19 +12,22 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JWTLoginFilter(
+
+    /*
+    Esse classe/ filtro é responsável por interceptar a requisição de login,
+     validar as credenciais do usuário e, se forem válidas,
+      chamar o método generateToken para criar o JWT
+     */
     private val authManager: AuthenticationManager,
     private val jwtUtil: JwtUtil
-) : UsernamePasswordAuthenticationFilter() {
-    init {
-        println("JWTLoginFilter registrado")
-    }
-    
+) :
+    UsernamePasswordAuthenticationFilter() {
+
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
-// autenticação/ criação de token  com o username e o password
-print("hum...")
-        val (username, password) = ObjectMapper().readValue(request.inputStream, Credentials::class.java)
-        val token = UsernamePasswordAuthenticationToken(username, password)
-        return authManager.authenticate(token)
+        val credentials = ObjectMapper().readValue(request.inputStream, Credentials::class.java)
+        return authManager.authenticate(
+            UsernamePasswordAuthenticationToken(credentials.username, credentials.password))
+
     }
 
     override fun successfulAuthentication(
@@ -34,11 +36,16 @@ print("hum...")
         chain: FilterChain?,
         authResult: Authentication?
     ) {
-        val username = (authResult?.principal as UserDetail).username
-        val token = jwtUtil.generateToken(username, user.authorities)
-        println("Token gerado: $token")
+        val username = authResult ?: throw IllegalStateException("Usuário inválido")
+
+        val authorities = authResult.authorities?.map {
+            Role(
+                nome = it.authority,
+                id = 1
+            )
+        } ?: emptyList()
+        val token = jwtUtil.generateToken(username.principal.toString(), authorities)
         response?.addHeader("Authorization", "Bearer $token")
-        println("Cabeçalho Authorization adicionado")
     }
-    
 }
+
