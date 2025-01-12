@@ -1,10 +1,8 @@
 package br.com.alura.forum.service
 
 import br.com.alura.forum.controller.LoginRequest
-import br.com.alura.forum.security.JwtUtil
-import org.springframework.http.ResponseEntity
+import br.com.alura.forum.security.jwt.JwtUtil
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestBody
 
 @Service
 class AuthService(

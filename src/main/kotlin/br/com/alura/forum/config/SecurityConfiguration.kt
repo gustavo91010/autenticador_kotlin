@@ -1,8 +1,8 @@
 package br.com.alura.forum.config
 
-import br.com.alura.forum.security.JWTAuthenticationFilter
-import br.com.alura.forum.security.JWTLoginFilter
-import br.com.alura.forum.security.JwtUtil
+import br.com.alura.forum.security.jwt.JWTAuthenticationFilter
+import br.com.alura.forum.security.jwt.JWTLoginFilter
+import br.com.alura.forum.security.jwt.JwtUtil
 
 
 import org.springframework.context.annotation.Bean

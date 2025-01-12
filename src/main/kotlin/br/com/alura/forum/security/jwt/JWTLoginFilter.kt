@@ -1,7 +1,7 @@
-package br.com.alura.forum.security
+package br.com.alura.forum.security.jwt
 
-import br.com.alura.forum.config.UserDetail
 import br.com.alura.forum.model.Role
+import br.com.alura.forum.security.Credentials
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
